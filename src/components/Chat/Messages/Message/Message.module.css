@@ -1,0 +1,49 @@
+.message {
+  display: flex;
+  color: #904097;
+  padding: 0 40px;
+  margin-top: 5px;
+}
+
+.message p {
+  margin: 5px;
+}
+
+.message.bySys {
+  font-size: 20px;
+  font-weight: bolder;
+  justify-content: center;
+}
+
+.message.byMe {
+  justify-content: flex-end;
+  color: #e7c5f0;
+}
+
+.message > p {
+  padding: 15px;
+  color: #662b75;
+}
+
+.message > div {
+  display: flex;
+  flex-direction: column;
+  padding: 5px 10px;
+  background-color: #e7c5f0;
+  border-radius: 25px 25px 25px 5px;
+}
+
+.message.byMe > div {
+  padding: 5px 10px;
+  background-color: #904097;
+  border-radius: 25px 25px 5px 25px;
+}
+
+.username {
+  color: #662b75;
+  font-weight: bold;
+}
+
+.message.byMe .username {
+  color: #fff;
+}

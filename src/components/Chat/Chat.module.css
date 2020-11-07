@@ -1,0 +1,14 @@
+.chat {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
+  background: #ffffff;
+}
+
+.middle {
+  width: 100%;
+  display: flex;
+}
