@@ -1,8 +1,7 @@
 import React from 'react';
 import s from './Input.module.css';
 import SVG from 'react-inlinesvg';
-
-const SendIco = () => <SVG className={s.mm6} src={require('../../../icons/send.svg')} />;
+import send from '../../../icons/send.svg';
 
 const Input = ({ message, setMessage, sendMessage }) => (
   <form className={s.container}>
@@ -15,7 +14,7 @@ const Input = ({ message, setMessage, sendMessage }) => (
       onKeyPress={(event) => (event.key === 'Enter' ? sendMessage(event) : null)}
     />
     <button className={s.btn} onClick={(event) => sendMessage(event)}>
-      <SendIco />
+      <SVG src={send} className={s.mm6} />
     </button>
   </form>
 );
