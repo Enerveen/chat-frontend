@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { connect } from 'react-redux';
+
 import s from './Users.module.css';
 
 const Users = ({ users }) => (
@@ -11,4 +13,10 @@ const Users = ({ users }) => (
   </div>
 );
 
-export default Users;
+const mapStateToProps = (state) => {
+  return {
+    users: state.chat.users,
+  };
+};
+
+export default connect(mapStateToProps, null)(Users);

@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 
+import { connect } from 'react-redux';
+import { setName, setRoom, setUsers } from '../../redux/actions';
+
 import Users from './Users/Users';
 import Messages from './Messages/Messages';
 import InfoBar from './InfoBar/InfoBar';
@@ -12,12 +15,9 @@ import s from './Chat.module.css';
 
 let socket;
 
-const Chat = ({ location }) => {
-  const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
+const Chat = ({ location, setName, setRoom, setUsers, name, room }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [users, setUsers] = useState([]);
 
   //I tried to use enviroment variables here, but for some reason it didn't work
 
@@ -79,7 +79,7 @@ const Chat = ({ location }) => {
     <div className={s.chat}>
       <InfoBar room={room} />
       <div className={s.middle}>
-        <Users users={users} />
+        <Users />
         <Messages messages={messages} name={name} />
       </div>
       <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
@@ -87,4 +87,11 @@ const Chat = ({ location }) => {
   );
 };
 
-export default Chat;
+const mapStateToProps = (state) => {
+  return {
+    name: state.data.name,
+    room: state.data.room,
+  };
+};
+
+export default connect(mapStateToProps, { setName, setRoom, setUsers })(Chat);

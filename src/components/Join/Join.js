@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { setName, setRoom } from '../../redux/actions';
+
 import s from './Join.module.css';
 
-const Join = () => {
-  const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
-
+const Join = ({ setName, setRoom, name, room }) => {
   //Username validation
 
   const NameHandler = (event) => {
@@ -41,4 +42,11 @@ const Join = () => {
   );
 };
 
-export default Join;
+const mapStateToProps = (state) => {
+  return {
+    name: state.data.name,
+    room: state.data.room,
+  };
+};
+
+export default connect(mapStateToProps, { setName, setRoom })(Join);
