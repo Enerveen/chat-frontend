@@ -8,14 +8,7 @@ import send from '../../../icons/send.svg';
 
 import s from './Input.module.css';
 
-const Input = ({ message, setMessage, socket }) => {
-  const sendMessage = (event) => {
-    event.preventDefault();
-    if (message) {
-      socket.emit('sendMessage', message, () => setMessage(''));
-    }
-  };
-
+const Input = ({ message, setMessage, sendMessage }) => {
   return (
     <form className={s.container}>
       <input

@@ -15,7 +15,7 @@ import s from './Chat.module.css';
 
 let socket;
 
-const Chat = ({ location, setName, setRoom, setUsers, setMessages, room }) => {
+const Chat = ({ location, message, setName, setRoom, setUsers, setMessages, setMessage }) => {
   //I tried to use enviroment variables here, but for some reason it didn't work
 
   const ENDPOINT = 'localhost:5000';
@@ -62,6 +62,16 @@ const Chat = ({ location, setName, setRoom, setUsers, setMessages, room }) => {
     });
   }, []);
 
+  /*I tried to put sendMessage function inside Input component,but there are problems with transferring socket
+    either as a prop and with redux, that is why I need to transfer the function itself as a prop*/
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    if (message) {
+      socket.emit('sendMessage', message, () => setMessage(''));
+    }
+  };
+
   return (
     <div className={s.chat}>
       <InfoBar />
@@ -69,17 +79,13 @@ const Chat = ({ location, setName, setRoom, setUsers, setMessages, room }) => {
         <Users />
         <Messages />
       </div>
-      <Input socket={socket} />
+      <Input sendMessage={sendMessage} />
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
-  console.log(state);
   return {
-    name: state.data.name,
-    room: state.data.room,
-    messages: state.chat.messages,
     message: state.chat.message,
   };
 };

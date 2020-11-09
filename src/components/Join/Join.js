@@ -6,7 +6,7 @@ import { setName, setRoom } from '../../redux/actions';
 
 import s from './Join.module.css';
 
-const Join = ({ setName, setRoom, name, room, setSocket }) => {
+const Join = ({ setName, setRoom, name, room }) => {
   //Username validation
 
   const NameHandler = (event) => {
