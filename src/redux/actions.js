@@ -25,3 +25,10 @@ export function setMessages(data) {
     payload: data,
   };
 }
+
+export function setMessage(data) {
+  return {
+    type: 'SET_MESSAGE',
+    payload: data,
+  };
+}

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 //I used query-string for easier parsing of URL
 import queryString from 'query-string';
 import io from 'socket.io-client';
 
 import { connect } from 'react-redux';
-import { setName, setRoom, setUsers } from '../../redux/actions';
+import { setName, setRoom, setUsers, setMessages, setMessage } from '../../redux/actions';
 
 import Users from './Users/Users';
 import Messages from './Messages/Messages';
@@ -15,21 +15,18 @@ import s from './Chat.module.css';
 
 let socket;
 
-const Chat = ({ location, setName, setRoom, setUsers, name, room }) => {
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-
+const Chat = ({ location, setName, setRoom, setUsers, setMessages, room }) => {
   //I tried to use enviroment variables here, but for some reason it didn't work
 
   const ENDPOINT = 'localhost:5000';
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
+    setRoom(room);
+    setName(name);
 
     socket = io(ENDPOINT);
 
-    setRoom(room);
-    setName(name);
     //Handling new user joining
     socket.emit('join', { name, room }, (error) => {
       /*When a user wants to invite somebody to chat room, he sends the link, that contains his username,
@@ -39,7 +36,7 @@ const Chat = ({ location, setName, setRoom, setUsers, name, room }) => {
 
       if (error === 'Already existing user') {
         let newName = prompt(`Choose your username for ${room}`);
-        if (RegExp('^(?!system$)(?=.{3,16}$)[a-zA-Z0-9]').test(newName)) {
+        if (newName && RegExp('^(?!system$)(?=.{3,16}$)[a-zA-Z0-9]').test(newName)) {
           window.location.href = `http://localhost:3000/chat?name=${newName}&room=${room}`;
         } else {
           alert(
@@ -51,13 +48,13 @@ const Chat = ({ location, setName, setRoom, setUsers, name, room }) => {
         console.log(error);
       }
     });
-  }, [ENDPOINT, location.search]);
+  }, [location.search]);
 
   //Handling new messages coming from server
 
   useEffect(() => {
     socket.on('message', (message) => {
-      setMessages((messages) => [...messages, message]);
+      setMessages(message);
     });
 
     socket.on('roomData', ({ users }) => {
@@ -65,33 +62,26 @@ const Chat = ({ location, setName, setRoom, setUsers, name, room }) => {
     });
   }, []);
 
-  //Creating sendMessage function to transfer it to <Input /> element as a prop
-
-  const sendMessage = (event) => {
-    event.preventDefault();
-
-    if (message) {
-      socket.emit('sendMessage', message, () => setMessage(''));
-    }
-  };
-
   return (
     <div className={s.chat}>
-      <InfoBar room={room} />
+      <InfoBar />
       <div className={s.middle}>
         <Users />
-        <Messages messages={messages} name={name} />
+        <Messages />
       </div>
-      <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
+      <Input socket={socket} />
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
     name: state.data.name,
     room: state.data.room,
+    messages: state.chat.messages,
+    message: state.chat.message,
   };
 };
 
-export default connect(mapStateToProps, { setName, setRoom, setUsers })(Chat);
+export default connect(mapStateToProps, { setName, setRoom, setUsers, setMessages, setMessage })(Chat);

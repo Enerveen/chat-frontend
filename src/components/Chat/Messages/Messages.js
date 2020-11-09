@@ -4,6 +4,8 @@ import React from 'react';
 
 import ScrollToBottom from 'react-scroll-to-bottom';
 
+import { connect } from 'react-redux';
+
 import Message from './Message/Message';
 
 import s from './Messages.module.css';
@@ -18,4 +20,11 @@ const Messages = ({ messages, name }) => (
   </ScrollToBottom>
 );
 
-export default Messages;
+const mapStateToProps = (state) => {
+  return {
+    name: state.data.name,
+    messages: state.chat.messages,
+  };
+};
+
+export default connect(mapStateToProps, null)(Messages);
